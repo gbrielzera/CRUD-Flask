@@ -3,30 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Meu Site{% endblock %}</title>
-    <link rel="stylesheet" href="{{  url_for('static', filename='style.css')  }}"
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <nav>
-        <a href="/">Home</a> |
-        <a href="/formulario">Formulário</a> |
-        <a href="/about">Sobre</a>
-    </nav>
+<nav>
+    <a href="{{ url_for('listar_usuarios') }}">Usuários</a> |
 
-    <hr>
-    
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for msg in messages %}
-                    <li>{{ msg }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}   
+    {% if session.get("user_id") %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
+</nav>
 
-    {% block content %}
-    {% endblock %}
+<hr>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul>
+            {% for msg in messages %}
+                <li>{{ msg }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+{% block content %}
+{% endblock %}
 
 </body>
 </html>

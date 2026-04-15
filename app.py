@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = "123"
@@ -28,7 +29,21 @@ class UserAuth(db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
-from flask import session
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "user_id" not in session:
+            flash("Faça login para acessar esta página.")
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash("Logout realizado com sucesso.")
+    return redirect(url_for("login"))
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -48,11 +63,6 @@ def login():
 
     return render_template("login.html")
 
-@app.route("/")
-def home():
-    nome = "Gabriel"
-    return render_template("index.html", nome_usuario=nome)
-
 @app.route("/about")
 def about():
     return render_template("about.html")
@@ -61,8 +71,8 @@ def about():
 def contact():
     return render_template("contact.html")
 
-
 @app.route("/formulario", methods=["GET", "POST"])
+@login_required
 def formulario():
     erro = None
 
@@ -83,11 +93,13 @@ def formulario():
     return render_template("formulario.html", erro=erro)
 
 @app.route("/usuarios")
+@login_required
 def listar_usuarios():
     usuarios = Usuario.query.all()
     return render_template("usuarios.html", usuarios=usuarios)
 
 @app.route("/deletar/<int:id>", methods=["POST"])
+@login_required
 def deletar_usuario(id):
     usuario = Usuario.query.get_or_404(id)
     db.session.delete(usuario)
@@ -97,11 +109,13 @@ def deletar_usuario(id):
     return redirect(url_for("listar_usuarios"))
 
 @app.route("/confirmar_delecao/<int:id>")
+@login_required
 def confirmar_delecao(id):
     usuario = Usuario.query.get_or_404(id)
     return render_template("confirmar_delecao.html", usuario=usuario)
 
 @app.route("/editar/<int:id>", methods=["GET", "POST"])
+@login_required
 def editar_usuario(id):
     usuario = Usuario.query.get_or_404(id)
 
@@ -122,6 +136,7 @@ def editar_usuario(id):
 
 
 @app.route("/resultado/<nome>")
+@login_required
 def resultado(nome):
     return render_template("resultado.html", nome=nome)
 
