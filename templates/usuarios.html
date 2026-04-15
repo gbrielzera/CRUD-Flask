@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Usuários cadastrados</h1>
+
+<ul>
+    {% for u in usuarios %}
+        <li>
+            {{ u.nome.capitalize() }}
+
+            |
+            <a href="{{ url_for('editar_usuario', id=u.id) }}">
+                Editar
+            </a>
+
+            |
+            <a href="{{ url_for('confirmar_delecao', id=u.id) }}">
+                Excluir
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+<a href="{{ url_for('formulario') }}">Adicionar novo</a>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Confirmar exclusão</h1>
+
+<p>
+    Tem certeza que deseja excluir
+    <strong>{{ usuario.nome }}</strong>?
+</p>
+
+<form action="{{ url_for('deletar_usuario', id=usuario.id) }}"
+      method="POST">
+    <button type="submit">Sim, excluir</button>
+</form>
+
+<a href="{{ url_for('listar_usuarios') }}">Cancelar</a>
+{% endblock %}
+``

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Editar usuário{% endblock %}
+
+{% block content %}
+<h1>Editar usuário</h1>
+
+<form method="POST">
+    <input type="text" name="nome" value="{{ usuario.nome }}">
+    <button type="submit">Salvar</button>
+</form>
+
+<a href="/usuarios">Voltar</a>
+{% endblock %}
