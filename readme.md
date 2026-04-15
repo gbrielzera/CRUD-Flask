@@ -18,3 +18,9 @@ Pequeno projeto em Flask com CRUD completo usando SQLite.
 bash
 pip install -r requirements.txt
 python app.py
+
+## Inicialização do projeto
+
+Depois de instalar as dependências, crie o banco e o usuário admin:
+
+python create_admin.py
