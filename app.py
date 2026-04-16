@@ -28,9 +28,8 @@ class UserAuth(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-@app.before_first_request
-def init_database():
+    
+with app.app_context():
     db.create_all()
 
     if not UserAuth.query.filter_by(username="admin").first():
