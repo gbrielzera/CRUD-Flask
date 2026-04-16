@@ -28,6 +28,16 @@ class UserAuth(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+@app.before_first_request
+def init_database():
+    db.create_all()
+
+    if not UserAuth.query.filter_by(username="admin").first():
+        admin = UserAuth(username="admin")
+        admin.set_password("123")
+        db.session.add(admin)
+        db.session.commit()
     
 def login_required(f):
     @wraps(f)
