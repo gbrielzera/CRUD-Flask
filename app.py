@@ -44,6 +44,11 @@ def logout():
     flash("Logout realizado com sucesso.")
     return redirect(url_for("login"))
 
+@app.route("/")
+def index():
+    if session.get("user_id"):
+        return redirect(url_for("listar_usuarios"))
+    return redirect(url_for("login"))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
