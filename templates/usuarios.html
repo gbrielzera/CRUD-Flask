@@ -1,25 +1,36 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Usuários cadastrados</h1>
+<h2 class="mb-3">Usuários cadastrados</h2>
 
-<ul>
+<a href="{{ url_for('formulario') }}" class="btn btn-success mb-3">
+  Adicionar novo
+</a>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
     {% for u in usuarios %}
-        <li>
-            {{ u.nome.capitalize() }}
+    <tr>
+      <td>{{ u.nome.capitalize() }}</td>
+      <td>
+        <a class="btn btn-sm btn-warning"
+           href="{{ url_for('editar_usuario', id=u.id) }}">
+          Editar
+        </a>
 
-            |
-            <a href="{{ url_for('editar_usuario', id=u.id) }}">
-                Editar
-            </a>
-
-            |
-            <a href="{{ url_for('confirmar_delecao', id=u.id) }}">
-                Excluir
-            </a>
-        </li>
+        <a class="btn btn-sm btn-danger"
+           href="{{ url_for('confirmar_delecao', id=u.id) }}">
+          Excluir
+        </a>
+      </td>
+    </tr>
     {% endfor %}
-</ul>
-
-<a href="{{ url_for('formulario') }}">Adicionar novo</a>
+  </tbody>
+</table>
 {% endblock %}
